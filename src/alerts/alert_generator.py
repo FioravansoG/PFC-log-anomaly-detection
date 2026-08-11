@@ -64,14 +64,38 @@ def normalize_random_forest_score(anomaly_probability: float) -> float:
     return max(0.0, min(1.0, anomaly_probability))
 
 
-def normalize_llm_score(confidence: float) -> float:
+def normalize_llm_score(confidence) -> float | None:
     """
-    Confidence declarada pela LLM, já em [0, 1] por construção do prompt.
-    Reforça-se: não é uma probabilidade calibrada.
+    Confidence declarada pela LLM, esperada em [0, 1] por construção do
+    prompt. Reforça-se: não é uma probabilidade calibrada.
+
+    A LLM demonstrou inconsistência de formatação na prática: parte das
+    respostas retorna confidence como fração decimal (ex: 0.9) e parte
+    como porcentagem com símbolo (ex: "90%") — mesmo com prompt idêntico.
+    Esta função normaliza ambos os formatos para a escala [0, 1].
     """
     if confidence is None:
         return None
-    return max(0.0, min(1.0, confidence))
+
+    if isinstance(confidence, str):
+        confidence = confidence.strip()
+        if confidence.endswith("%"):
+            try:
+                value = float(confidence.rstrip("%")) / 100.0
+            except ValueError:
+                return None
+        else:
+            try:
+                value = float(confidence)
+            except ValueError:
+                return None
+    else:
+        try:
+            value = float(confidence)
+        except (TypeError, ValueError):
+            return None
+
+    return max(0.0, min(1.0, value))
 
 
 NORMALIZERS = {
