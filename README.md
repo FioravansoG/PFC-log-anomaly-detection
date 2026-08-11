@@ -55,8 +55,7 @@ de execução. Ver `METODOLOGIA.md` para detalhes sobre essa decisão.
 ### Opção B — Usar os artefatos já processados
 
 Os arquivos de `data/processed/` (incluindo as predições já geradas
-pelas três abordagens) estão disponíveis em: `[LINK DA PASTA
-COMPARTILHADA — preencher]`. Basta baixar e colocar em
+pelas três abordagens) estão disponíveis em: https://drive.google.com/file/d/1EIpSi2hVjEucZGsDWK-1tDZf8gAo8aSf/view?usp=sharing. Basta baixar e colocar em
 `data/processed/` para rodar o dashboard sem reprocessar nada.
 
 ## Pré-requisitos
