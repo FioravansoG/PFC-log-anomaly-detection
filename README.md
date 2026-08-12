@@ -19,21 +19,23 @@ sob métricas comuns?
 
 ## Estrutura do projeto
 
+```
 projeto/
 ├── data/
-│ ├── raw/ # dados brutos (não versionado — ver "Dados" abaixo)
-│ └── processed/ # dados processados (não versionado)
+│   ├── raw/            # dados brutos (não versionado — ver "Dados" abaixo)
+│   └── processed/       # dados processados (não versionado)
 ├── src/
-│ ├── ingestion/ # leitura do log bruto e dos rótulos
-│ ├── parsing/ # parsing com Drain3, agrupamento por BlockId
-│ ├── features/ # matriz bloco x evento, representação textual
-│ ├── models/ # abordagem não supervisionada, supervisionada e baseada em LLM
-│ ├── alerts/ # geração de alertas por threshold
-│ └── evaluation/ # split treino/teste, métricas
-├── dashboard/ # interface Streamlit
-├── main.py # orquestração do pipeline completo
-├── METODOLOGIA.md # decisões metodológicas detalhadas
+│   ├── ingestion/        # leitura do log bruto e dos rótulos
+│   ├── parsing/           # parsing com Drain3, agrupamento por BlockId
+│   ├── features/           # matriz bloco x evento, representação textual
+│   ├── models/               # abordagem não supervisionada, supervisionada e baseada em LLM
+│   ├── alerts/                 # geração de alertas por threshold
+│   └── evaluation/               # split treino/teste, métricas
+├── dashboard/               # interface Streamlit
+├── main.py                    # orquestração do pipeline completo
+├── METODOLOGIA.md               # decisões metodológicas detalhadas
 └── requirements.txt
+```
 
 ## Dados
 
