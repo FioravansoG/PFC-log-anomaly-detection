@@ -15,8 +15,9 @@ Documentação metodológica completa em [`METODOLOGIA.md`](METODOLOGIA.md).
 ## Pergunta científica
 
 Como diferentes paradigmas de Inteligência Artificial se comportam na
-detecção de anomalias em logs quando avaliados sobre uma mesma base e
-sob métricas comuns?
+detecção de anomalias em logs, e esse comportamento se mantém
+consistente entre domínios distintos, quando avaliados sob métricas
+comuns?
 
 ## Estrutura do projeto
 
@@ -56,8 +57,8 @@ obtê-los:
 
 **Apache/AIT-LDS:**
 1. Baixar o cenário `russellmitchell` (https://zenodo.org/records/5789064/files/russellmitchell.zip)
-   do AIT Log Data Set (arquivo `intranet.smith.russellmitchell.com-access.log.2` + rótulos
-   JSON-lines de ataque).
+   do AIT Log Data Set (arquivos `intranet.smith.russellmitchell.com-access.log.2` + 
+   `intranet.smith.russellmitchell.com-access.log.2.labels`).
 
 2. Colocar os arquivos em `data/raw/apache/`.
 
