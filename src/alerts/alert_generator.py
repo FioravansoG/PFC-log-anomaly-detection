@@ -116,9 +116,19 @@ def generate_alerts(predictions_path, model_name, blocks_sequences_path, output_
         raise ValueError(f"model_name deve ser um de {list(NORMALIZERS.keys())}")
 
     preds = pd.read_csv(predictions_path)
-    blocks = pd.read_csv(blocks_sequences_path, usecols=["BlockId", "EventSequence"])
 
-    df = preds.merge(blocks, on="BlockId", how="left")
+    if blocks_sequences_path is not None and Path(blocks_sequences_path).exists():
+        blocks = pd.read_csv(blocks_sequences_path)
+        if "EventSequence" in blocks.columns:
+            df = preds.merge(blocks[["BlockId", "EventSequence"]], on="BlockId", how="left")
+        else:
+            df = preds.copy()
+            df["EventSequence"] = ""
+    else:
+        # Base sem agrupamento por bloco (ex.: Apache, onde cada linha já é a
+        # unidade de análise) — não há sequência de eventos para anexar.
+        df = preds.copy()
+        df["EventSequence"] = ""
 
     normalizer = NORMALIZERS[model_name]
     score_col = SCORE_COLUMNS[model_name]
