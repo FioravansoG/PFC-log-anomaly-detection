@@ -23,11 +23,9 @@ import streamlit as st
 
 from src.evaluation.metrics import compute_metrics
 from src.evaluation.confusion_matrix import plot_confusion_matrix
-from src.ingestion.apache_label_loader import load_apache_attack_lines
 
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "processed"
-RAW_DIR = Path(__file__).resolve().parents[1] / "data" / "raw"
 
 # ----------------------------------------------------------------------------
 # CONFIGURAÇÃO DAS DUAS BASES
@@ -78,7 +76,7 @@ DATASETS = {
         "confusao_completo": DATA_DIR / "matrizes_confusao_apache_com_llm.png",
         "confusao_amostra": None,
         "parsed_file": DATA_DIR / "apache_parsed.csv",
-        "labels_file": RAW_DIR / "apache" / "intranet.smith.russellmitchell.com-access.log.2.labels",
+        "tags_file": DATA_DIR / "apache_line_tags.csv",
     },
 }
 
@@ -310,14 +308,17 @@ with tabs[4]:
             "A base Apache/AIT-LDS fornece rótulos nomeados por etapa de ataque real, "
             "permitindo uma catalogação direta, sem inferência estatística."
         )
-        if not dataset_cfg["labels_file"].exists():
-            st.info(f"Arquivo de rótulos não encontrado em `{dataset_cfg['labels_file']}`.")
+        tags_df = load_csv(dataset_cfg["tags_file"])
+        if tags_df is None:
+            st.info(f"Arquivo `{dataset_cfg['tags_file'].name}` não encontrado — rode "
+                   "`python -m src.features.apache_vectorizer` primeiro.")
         else:
-            tags_por_linha = load_apache_attack_lines(dataset_cfg["labels_file"])
             contagem = {}
-            for tags in tags_por_linha.values():
-                for tag in tags:
-                    contagem[tag] = contagem.get(tag, 0) + 1
+            for tags in tags_df["AttackTags"].dropna():
+                for tag in str(tags).split(";"):
+                    tag = tag.strip()
+                    if tag:
+                        contagem[tag] = contagem.get(tag, 0) + 1
             if contagem:
                 tag_df = pd.DataFrame(
                     sorted(contagem.items(), key=lambda x: -x[1]),
@@ -325,6 +326,8 @@ with tabs[4]:
                 )
                 st.dataframe(tag_df, use_container_width=True)
                 st.bar_chart(tag_df.set_index("Categoria de Ataque"))
+            else:
+                st.info("Nenhuma tag de ataque encontrada no arquivo processado.")
 
 # ----------------------------------------------------------------------------
 # ABA 6 — COMPARAÇÃO ENTRE BASES (independente do seletor de base)

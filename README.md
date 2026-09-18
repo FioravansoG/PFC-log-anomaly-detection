@@ -74,7 +74,7 @@ execução). Ver `METODOLOGIA.md` para detalhes sobre essas decisões.
 
 Os arquivos de `data/processed/` (incluindo as predições já geradas
 pelas três abordagens, para as duas bases) estão disponíveis em:
-https://drive.google.com/file/d/1EIpSi2hVjEucZGsDWK-1tDZf8gAo8aSf/view?usp=sharing.
+https://drive.google.com/file/d/1Ae4s_pLW3MMImFi2BdCXai0kGLAHeflL/view?usp=sharing.
 Basta baixar e colocar em `data/processed/` para rodar o dashboard
 sem reprocessar nada.
 
@@ -143,7 +143,10 @@ Para rodar uma fase isoladamente:
 3. `src/features/apache_vectorizer.py` — vetor de características
    por linha (one-hot do EventId + atributos auxiliares) e split
    estratificado treino/teste (não há um módulo de split separado
-   para o Apache, diferente do HDFS)
+   para o Apache, diferente do HDFS); também gera
+   `apache_line_tags.csv` (LineId → tags de ataque), usado pela aba
+   de catalogação do dashboard sem depender do arquivo de rótulos
+   bruto
 4. `src/models/isolation_forest_model.py` e
    `src/models/random_forest_model.py` — abordagens não
    supervisionada e supervisionada, sobre o vetor de características

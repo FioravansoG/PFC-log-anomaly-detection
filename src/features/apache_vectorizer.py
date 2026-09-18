@@ -57,6 +57,11 @@ def build_apache_feature_matrix(parsed_csv_path, labels_path, output_dir):
     n_total_lines = len(parsed)
 
     labels_df = build_apache_labels_df(labels_path, n_total_lines)
+
+    tags_out = output_dir / "apache_line_tags.csv"
+    labels_df[["BlockId", "AttackTags"]].to_csv(tags_out, index=False)
+    print(f"Tags de ataque salvas em: {tags_out}")
+
     df = parsed.merge(labels_df, left_on="LineId", right_on="BlockId", how="inner")
 
     print(f"Total de linhas: {len(df)} | Anômalas: {(df['Label'] == 'Anomaly').sum()} "
